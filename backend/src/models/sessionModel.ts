@@ -1,17 +1,18 @@
 import { supabase } from '../config/supabase';
 
-export const getAllTutors = async () => {
-  const { data, error } = await supabase.from('tutors').select('*');
+// Get all sessions
+export const getAllSessions = async () => {
+  const { data, error } = await supabase.from('sessions').select('*');
   if (error) {
     throw new Error(error.message);
   }
   return data;
 };
 
-// Get a single tutor by ID
-export const getTutorById = async (id: string) => {
+// Get a single session by ID
+export const getSessionById = async (id: string) => {
   const { data, error } = await supabase
-    .from('tutors')
+    .from('sessions')
     .select('*')
     .eq('id', id)
     .single();
@@ -22,11 +23,11 @@ export const getTutorById = async (id: string) => {
   return data;
 };
 
-// Create a new tutor
-export const createTutor = async (tutorData: any) => {
+// Create a new session
+export const createSession = async (sessionData: any) => {
   const { data, error } = await supabase
-    .from('tutors')
-    .insert([tutorData])
+    .from('sessions')
+    .insert([sessionData])
     .select();
 
   if (error) {
@@ -35,11 +36,11 @@ export const createTutor = async (tutorData: any) => {
   return data[0];
 };
 
-// Update a tutor
-export const updateTutor = async (id: string, tutorData: any) => {
+// Update a session
+export const updateSession = async (id: string, sessionData: any) => {
   const { data, error } = await supabase
-    .from('tutors')
-    .update(tutorData)
+    .from('sessions')
+    .update(sessionData)
     .eq('id', id)
     .select();
 
@@ -49,10 +50,10 @@ export const updateTutor = async (id: string, tutorData: any) => {
   return data[0];
 };
 
-// Delete a tutor
-export const deleteTutor = async (id: string) => {
+// Delete a session
+export const deleteSession = async (id: string) => {
   const { error } = await supabase
-    .from('tutors')
+    .from('sessions')
     .delete()
     .eq('id', id);
 

@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import studentRoutes from './routes/studentRoutes';
 import tutorRoutes from './routes/tutorRoutes';
+import sessionRoutes from './routes/sessionRoutes';
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.get('/', (req, res) => {
 // API Routes
 app.use('/students', studentRoutes);
 app.use('/tutors', tutorRoutes);
+app.use('/sessions', sessionRoutes);
 
 // Start Server
 app.listen(port, () => {
