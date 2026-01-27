@@ -22,6 +22,20 @@ export const getTutorById = async (id: string) => {
   return data;
 };
 
+//Get a Tutor based on email
+export const getTutorByEmail = async (email: string) => {
+  const { data, error } = await supabase
+    .from('tutors')
+    .select('*')
+    .eq('email', email)
+    .single();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data;
+};
+
 // Create a new tutor
 export const createTutor = async (tutorData: any) => {
   const { data, error } = await supabase

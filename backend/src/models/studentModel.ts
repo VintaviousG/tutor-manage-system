@@ -9,7 +9,6 @@ export const getAllStudents = async () => {
   return data;
 };
 
-// Get a single student based id but my id is uuid
 
 
 //Get a Student based on email

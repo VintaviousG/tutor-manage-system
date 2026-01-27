@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { 
   getAllTutors, 
-  getTutorById, 
+  getTutorByEmail, 
   createTutor, 
   updateTutor, 
   deleteTutor 
@@ -18,8 +18,8 @@ export const getTutors = async (req: Request, res: Response) => {
 
 export const getTutor = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-    const tutor = await getTutorById(id as string);
+    const { email } = req.params;
+    const tutor = await getTutorByEmail(email as string);
     res.json(tutor);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
