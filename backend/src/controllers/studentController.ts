@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { 
-  getAllStudents, 
-  getStudentById, 
+  getAllStudents,  
   getStudentByEmail,
   createStudent, 
   updateStudent, 
@@ -17,15 +16,6 @@ export const getStudents = async (req: Request, res: Response) => {
   }
 };
 
-// export const getStudent = async (req: Request, res: Response) => {
-//   try {
-//     const { id } = req.params;
-//     const student = await getStudentById(id as string);
-//     res.json(student);
-//   } catch (error: any) {
-//     res.status(500).json({ error: error.message });
-//   }
-// };
 
 export const getStudent = async (req: Request, res: Response) => {
   try {

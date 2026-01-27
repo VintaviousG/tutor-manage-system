@@ -1,5 +1,5 @@
 import { supabase } from '../config/supabase';
-import { validate as isUuid } from 'uuid';
+
 //Get all students function to retrieve all students from Supabase DB
 export const getAllStudents = async () => {
   const { data, error } = await supabase.from('students').select('*');
@@ -10,26 +10,7 @@ export const getAllStudents = async () => {
 };
 
 // Get a single student based id but my id is uuid
-export const getStudentById = async (id: string) => {
-  if (!isUuid(id)) {
-    throw new Error('Invalid student ID');
-  }
- try {
-  const { data, error } = await supabase
-    .from('students')
-    .select('*')
-    .eq('id', id)
-    .single();
 
-  if (error) {
-    throw new Error(error.message);
-  }
-  return data;
- } catch (error) {
-  console.error('Error fetching student:', error);
-  throw error;
- }
-};
 
 //Get a Student based on email
 export const getStudentByEmail = async (email: string) => {
