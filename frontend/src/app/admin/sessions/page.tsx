@@ -1,7 +1,10 @@
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-
-export default function SessionsPage() {
+import { DataTable } from "@/components/admin/DataTable"
+import { columns } from "./columns"
+import { getSessions } from "@/lib/actions/sessions"
+export default async function SessionsPage() {
+  const sessions = await getSessions()
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -11,8 +14,7 @@ export default function SessionsPage() {
         </Button>
       </div>
       <div className="rounded-md border p-4">
-        {/* TODO: Add DataTable here */}
-        <p className="text-sm text-muted-foreground">List of sessions will appear here.</p>
+        <DataTable columns={columns} data={sessions} />
       </div>
     </div>
   )

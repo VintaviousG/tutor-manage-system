@@ -4,7 +4,9 @@ import { redirect } from "next/navigation"
 
 export async function getSessions() {
   // TODO: Fetch from backend API
-  return []
+  const res = await fetch("http://localhost:4000/sessions")
+  const data = await res.json()
+  return data
 }
 
 export async function createSession(formData: FormData) {
