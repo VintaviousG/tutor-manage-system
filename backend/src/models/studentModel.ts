@@ -11,12 +11,12 @@ export const getAllStudents = async () => {
 
 
 
-//Get a Student based on email
-export const getStudentByEmail = async (email: string) => {
+//Get a Student based on id
+export const getStudentById = async (id: string) => {
   const { data, error } = await supabase
     .from('students')
     .select('*')
-    .eq('email', email)
+    .eq('id', id)
     .single();
 
   if (error) {

@@ -10,7 +10,7 @@ import {
 const router = Router();
 
 router.get('/', getStudents);
-router.get('/:email', getStudent);
+router.get('/:id', getStudent);
 router.post('/', createNewStudent);
 router.put('/:id', updateExistingStudent);
 router.delete('/:id', deleteExistingStudent);
