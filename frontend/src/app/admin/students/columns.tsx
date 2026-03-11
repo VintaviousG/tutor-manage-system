@@ -20,7 +20,6 @@ export type Student = {
   last_name: string
   email: string
   phone: string
-  status: "active" | "inactive" | "pending"
 }
 
 export const columns: ColumnDef<Student>[] = [

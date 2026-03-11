@@ -42,10 +42,7 @@ export default async function ViewStudentPage({
           <h3 className="text-sm font-medium text-muted-foreground">Phone</h3>
           <p className="text-lg">{student.phone || "N/A"}</p>
         </div>
-        <div className="pt-4 border-t">
-          <h3 className="text-sm font-medium text-muted-foreground">Status</h3>
-          <p className="text-lg capitalize font-medium">{student.status}</p>
-        </div>
+
       </div>
     </div>
   )

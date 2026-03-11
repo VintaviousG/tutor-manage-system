@@ -31,7 +31,6 @@ export async function createStudent(formData: FormData) {
     last_name: formData.get('last_name'),
     email: formData.get('email'),
     phone: formData.get('phone'),
-    status: 'active'
   }
 
   const res = await fetch(API_URL, {
