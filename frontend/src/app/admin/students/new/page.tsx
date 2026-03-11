@@ -14,13 +14,23 @@ export default function NewStudentPage() {
         </Button>
       </div>
       <form action={createStudent} className="space-y-4 rounded-md border p-4">
-        <div className="space-y-2">
-          <Label htmlFor="name">Name</Label>
-          <Input id="name" name="name" placeholder="John Doe" required />
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="first_name">First Name</Label>
+            <Input id="first_name" name="first_name" placeholder="John" required />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="last_name">Last Name</Label>
+            <Input id="last_name" name="last_name" placeholder="Doe" required />
+          </div>
         </div>
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
-          <Input id="email" name="email" type="email" placeholder="john@example.com" required />
+          <Input id="email" name="email" type="email" placeholder="john.doe@example.com" required />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="phone">Phone</Label>
+          <Input id="phone" name="phone" type="tel" placeholder="(555) 555-5555" />
         </div>
         <Button type="submit">Create Student</Button>
       </form>
