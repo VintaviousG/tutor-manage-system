@@ -2,31 +2,31 @@
 
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
-
-const API_URL = "http://localhost:4000/sessions"
+import { supabase } from "../supabase"
 
 export async function getSessions() {
-  const res = await fetch(API_URL, {
-    cache: 'no-store'
-  })
-  if (!res.ok) {
-    throw new Error('Failed to fetch sessions')
+  const { data, error } = await supabase.from('sessions').select('*');
+  if (error) {
+    throw new Error(error.message);
   }
-  return res.json()
+  return data || [];
 }
 
 export async function getSessionById(id: string) {
-  const res = await fetch(`${API_URL}/${id}`, {
-    cache: 'no-store'
-  })
-  if (!res.ok) {
-    throw new Error('Failed to fetch session')
+  const { data, error } = await supabase
+    .from('sessions')
+    .select('*')
+    .eq('id', id)
+    .single();
+
+  if (error) {
+    throw new Error(error.message);
   }
-  return res.json()
+  return data;
 }
 
 export async function createSession(formData: FormData) {
-  const data = {
+  const sessionData = {
     student_id: formData.get('student_id'),
     tutor_id: formData.get('tutor_id'),
     session_date: formData.get('session_date'),
@@ -35,17 +35,12 @@ export async function createSession(formData: FormData) {
     notes: formData.get('notes') || '',
   }
 
-  const res = await fetch(API_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  })
+  const { error } = await supabase
+    .from('sessions')
+    .insert([sessionData]);
 
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(`Failed to create session: ${err.error || res.statusText}`)
+  if (error) {
+    throw new Error(`Failed to create session: ${error.message}`)
   }
 
   revalidatePath("/admin/sessions")
@@ -53,7 +48,7 @@ export async function createSession(formData: FormData) {
 }
 
 export async function updateSession(id: string, formData: FormData) {
-  const data = {
+  const sessionData = {
     student_id: formData.get('student_id'),
     tutor_id: formData.get('tutor_id'),
     session_date: formData.get('session_date'),
@@ -62,17 +57,13 @@ export async function updateSession(id: string, formData: FormData) {
     notes: formData.get('notes') || '',
   }
 
-  const res = await fetch(`${API_URL}/${id}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  })
+  const { error } = await supabase
+    .from('sessions')
+    .update(sessionData)
+    .eq('id', id);
 
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(`Failed to update session: ${err.error || res.statusText}`)
+  if (error) {
+    throw new Error(`Failed to update session: ${error.message}`)
   }
 
   revalidatePath("/admin/sessions")
@@ -81,12 +72,13 @@ export async function updateSession(id: string, formData: FormData) {
 }
 
 export async function deleteSession(id: string) {
-  const res = await fetch(`${API_URL}/${id}`, {
-    method: 'DELETE',
-  })
+  const { error } = await supabase
+    .from('sessions')
+    .delete()
+    .eq('id', id);
 
-  if (!res.ok) {
-    throw new Error('Failed to delete session')
+  if (error) {
+    throw new Error(`Failed to delete session: ${error.message}`)
   }
 
   revalidatePath("/admin/sessions")

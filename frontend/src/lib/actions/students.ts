@@ -2,47 +2,43 @@
 
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
-
-const API_URL = "http://localhost:4000/students"
+import { supabase } from "../supabase"
 
 export async function getStudents() {
-  const res = await fetch(API_URL, {
-    cache: 'no-store'
-  })
-  if (!res.ok) {
-    throw new Error('Failed to fetch students')
+  const { data, error } = await supabase.from('students').select('*');
+  if (error) {
+    throw new Error(error.message);
   }
-  return res.json()
+  return data || [];
 }
 
 export async function getStudentById(id: string) {
-  const res = await fetch(`${API_URL}/${id}`, {
-    cache: 'no-store'
-  })
-  if (!res.ok) {
-    throw new Error('Failed to fetch student')
+  const { data, error } = await supabase
+    .from('students')
+    .select('*')
+    .eq('id', id)
+    .single();
+
+  if (error) {
+    throw new Error(error.message);
   }
-  return res.json()
+  return data;
 }
 
 export async function createStudent(formData: FormData) {
-  const data = {
+  const studentData = {
     first_name: formData.get('first_name'),
     last_name: formData.get('last_name'),
     email: formData.get('email'),
     phone: formData.get('phone'),
   }
 
-  const res = await fetch(API_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  })
+  const { error } = await supabase
+    .from('students')
+    .insert([studentData]);
 
-  if (!res.ok) {
-    throw new Error('Failed to create student')
+  if (error) {
+    throw new Error(`Failed to create student: ${error.message}`)
   }
 
   revalidatePath("/admin/students")
@@ -50,23 +46,20 @@ export async function createStudent(formData: FormData) {
 }
 
 export async function updateStudent(id: string, formData: FormData) {
-  const data = {
+  const studentData = {
     first_name: formData.get('first_name'),
     last_name: formData.get('last_name'),
     email: formData.get('email'),
     phone: formData.get('phone'),
   }
 
-  const res = await fetch(`${API_URL}/${id}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  })
+  const { error } = await supabase
+    .from('students')
+    .update(studentData)
+    .eq('id', id);
 
-  if (!res.ok) {
-    throw new Error('Failed to update student')
+  if (error) {
+    throw new Error(`Failed to update student: ${error.message}`)
   }
 
   revalidatePath("/admin/students")
@@ -75,12 +68,13 @@ export async function updateStudent(id: string, formData: FormData) {
 }
 
 export async function deleteStudent(id: string) {
-  const res = await fetch(`${API_URL}/${id}`, {
-    method: 'DELETE',
-  })
+  const { error } = await supabase
+    .from('students')
+    .delete()
+    .eq('id', id);
 
-  if (!res.ok) {
-    throw new Error('Failed to delete student')
+  if (error) {
+    throw new Error(`Failed to delete student: ${error.message}`)
   }
 
   revalidatePath("/admin/students")

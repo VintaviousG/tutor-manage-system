@@ -2,31 +2,31 @@
 
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
-
-const API_URL = "http://localhost:4000/tutors"
+import { supabase } from "../supabase"
 
 export async function getTutors() {
-  const res = await fetch(API_URL, {
-    cache: 'no-store'
-  })
-  if (!res.ok) {
-    throw new Error('Failed to fetch tutors')
+  const { data, error } = await supabase.from('tutors').select('*');
+  if (error) {
+    throw new Error(error.message);
   }
-  return res.json()
+  return data || [];
 }
 
 export async function getTutorById(id: string) {
-  const res = await fetch(`${API_URL}/${id}`, {
-    cache: 'no-store'
-  })
-  if (!res.ok) {
-    throw new Error('Failed to fetch tutor')
+  const { data, error } = await supabase
+    .from('tutors')
+    .select('*')
+    .eq('id', id)
+    .single();
+
+  if (error) {
+    throw new Error(error.message);
   }
-  return res.json()
+  return data;
 }
 
 export async function createTutor(formData: FormData) {
-  const data = {
+  const tutorData = {
     first_name: formData.get('first_name'),
     last_name: formData.get('last_name'),
     email: formData.get('email'),
@@ -36,17 +36,12 @@ export async function createTutor(formData: FormData) {
     is_active: formData.get('is_active') === 'on' || formData.get('is_active') === 'true',
   }
 
-  const res = await fetch(API_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  })
+  const { error } = await supabase
+    .from('tutors')
+    .insert([tutorData]);
 
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(`Failed to create tutor: ${err.error || res.statusText}`)
+  if (error) {
+    throw new Error(`Failed to create tutor: ${error.message}`)
   }
 
   revalidatePath("/admin/tutors")
@@ -54,7 +49,7 @@ export async function createTutor(formData: FormData) {
 }
 
 export async function updateTutor(id: string, formData: FormData) {
-  const data = {
+  const tutorData = {
     first_name: formData.get('first_name'),
     last_name: formData.get('last_name'),
     email: formData.get('email'),
@@ -64,17 +59,13 @@ export async function updateTutor(id: string, formData: FormData) {
     is_active: formData.get('is_active') === 'on' || formData.get('is_active') === 'true',
   }
 
-  const res = await fetch(`${API_URL}/${id}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  })
+  const { error } = await supabase
+    .from('tutors')
+    .update(tutorData)
+    .eq('id', id);
 
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(`Failed to update tutor: ${err.error || res.statusText}`)
+  if (error) {
+    throw new Error(`Failed to update tutor: ${error.message}`)
   }
 
   revalidatePath("/admin/tutors")
@@ -83,12 +74,13 @@ export async function updateTutor(id: string, formData: FormData) {
 }
 
 export async function deleteTutor(id: string) {
-  const res = await fetch(`${API_URL}/${id}`, {
-    method: 'DELETE',
-  })
+  const { error } = await supabase
+    .from('tutors')
+    .delete()
+    .eq('id', id);
 
-  if (!res.ok) {
-    throw new Error('Failed to delete tutor')
+  if (error) {
+    throw new Error(`Failed to delete tutor: ${error.message}`)
   }
 
   revalidatePath("/admin/tutors")
