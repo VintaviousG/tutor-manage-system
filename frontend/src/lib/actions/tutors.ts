@@ -25,6 +25,15 @@ export async function getTutorById(id: string) {
   return data;
 }
 
+//get total number of tutors
+export async function getTotalTutors() {
+  const {count, error} = await supabase.from('tutors').select('*', {count: 'exact'});
+  if (error) {
+    throw new Error(error.message);
+  }
+  return count || 0;
+}
+
 export async function createTutor(formData: FormData) {
   const tutorData = {
     first_name: formData.get('first_name'),

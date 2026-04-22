@@ -1,5 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-
+import { getTotalStudents } from "@/lib/actions/students"
+import { getTotalTutors } from "@/lib/actions/tutors"
+import { getTotalSessions } from "@/lib/actions/sessions"
 export default function DashboardPage() {
   return (
     <div className="space-y-4">
@@ -12,10 +14,8 @@ export default function DashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">1,234</div>
-            <p className="text-xs text-muted-foreground">
-              +20.1% from last month
-            </p>
+            <div className="text-2xl font-bold">{ getTotalStudents()}</div>
+         
           </CardContent>
         </Card>
         <Card>
@@ -25,10 +25,8 @@ export default function DashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">45</div>
-            <p className="text-xs text-muted-foreground">
-              +2 new this month
-            </p>
+            <div className="text-2xl font-bold">{getTotalTutors()}</div>
+          
           </CardContent>
         </Card>
         <Card>
@@ -38,10 +36,8 @@ export default function DashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">573</div>
-            <p className="text-xs text-muted-foreground">
-              +201 since last week
-            </p>
+            <div className="text-2xl font-bold">{getTotalSessions()}</div>
+       
           </CardContent>
         </Card>
       </div>

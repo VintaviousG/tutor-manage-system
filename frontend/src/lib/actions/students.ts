@@ -12,6 +12,15 @@ export async function getStudents() {
   return data || [];
 }
 
+//get total number of students
+export async function getTotalStudents() {
+ const {count, error} = await supabase.from('students').select('*', {count: 'exact'});
+ if (error) {
+  throw new Error(error.message);
+ }
+ return count || 0;
+}
+
 export async function getStudentById(id: string) {
   const { data, error } = await supabase
     .from('students')

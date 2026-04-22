@@ -25,6 +25,41 @@ export async function getSessionById(id: string) {
   return data;
 }
 
+//get total number of sessions
+export async function getTotalSessions() {
+  const {count, error} = await supabase.from('sessions').select('*', {count: 'exact'});
+  if (error) {
+    throw new Error(error.message);
+  }
+  return count || 0;
+}
+
+export async function getSessionsByStudentId(studentId: string) {
+  const { data, error } = await supabase
+    .from('sessions')
+    .select('*')
+    .eq('student_id', studentId)
+    .order('session_date', { ascending: true });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data || [];
+}
+
+export async function getSessionsByTutorId(tutorId: string) {
+  const { data, error } = await supabase
+    .from('sessions')
+    .select('*')
+    .eq('tutor_id', tutorId)
+    .order('session_date', { ascending: true });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data || [];
+}
+
 export async function createSession(formData: FormData) {
   const sessionData = {
     student_id: formData.get('student_id'),
