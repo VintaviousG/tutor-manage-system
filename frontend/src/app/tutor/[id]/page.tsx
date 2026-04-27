@@ -3,6 +3,8 @@ import { getSessionsByTutorId } from "@/lib/actions/sessions"
 import { getStudents } from "@/lib/actions/students"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { CalendarIcon, ClockIcon, User, Mail, Phone, BookOpen, DollarSign, Activity } from "lucide-react"
+import { logout } from "@/lib/actions/auth"
+import { Button } from "@/components/ui/button"
 
 export default async function TutorDashboard({ params }: { params: { id: string } }) {
   // Wait for params to be unpacked in Next.js 15+ async params standard
@@ -50,6 +52,9 @@ export default async function TutorDashboard({ params }: { params: { id: string 
           <h1 className="text-3xl font-bold tracking-tight">Tutor Dashboard</h1>
           <p className="text-muted-foreground mt-1">Manage your sessions, {tutor.first_name}.</p>
         </div>
+        <form action={logout}>
+          <Button variant="outline" type="submit">Log Out</Button>
+        </form>
       </div>
 
       <div className="grid gap-6 md:grid-cols-3">
