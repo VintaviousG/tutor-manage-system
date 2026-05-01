@@ -7,4 +7,4 @@ if (!supabaseUrl) throw new Error("Supabase URL is required. Please check your .
 if (!supabaseAnonKey) throw new Error("Supabase Anon Key is required. Please check your .env.local file.");
 
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = createClient(supabaseUrl, supabaseAnonKey); 
