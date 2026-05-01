@@ -2,9 +2,10 @@
 
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
-import { supabase } from "../supabase"
+import { createClient  } from "@/lib/supabase/server"
 
 export async function getSessions() {
+  const supabase = await createClient();
   const { data, error } = await supabase.from('sessions').select('*');
   if (error) {
     throw new Error(error.message);
@@ -13,6 +14,7 @@ export async function getSessions() {
 }
 
 export async function getSessionById(id: string) {
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('sessions')
     .select('*')
@@ -27,6 +29,7 @@ export async function getSessionById(id: string) {
 
 //get total number of sessions
 export async function getTotalSessions() {
+  const supabase = await createClient();
   const {count, error} = await supabase.from('sessions').select('*', {count: 'exact'});
   if (error) {
     throw new Error(error.message);
@@ -35,6 +38,7 @@ export async function getTotalSessions() {
 }
 
 export async function getSessionsByStudentId(studentId: string) {
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('sessions')
     .select('*')
@@ -48,6 +52,7 @@ export async function getSessionsByStudentId(studentId: string) {
 }
 
 export async function getSessionsByTutorId(tutorId: string) {
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('sessions')
     .select('*')
@@ -61,6 +66,7 @@ export async function getSessionsByTutorId(tutorId: string) {
 }
 
 export async function createSession(formData: FormData) {
+  const supabase = await createClient();
   const sessionData = {
     student_id: formData.get('student_id'),
     tutor_id: formData.get('tutor_id'),
@@ -83,6 +89,7 @@ export async function createSession(formData: FormData) {
 }
 
 export async function updateSession(id: string, formData: FormData) {
+  const supabase = await createClient();
   const sessionData = {
     student_id: formData.get('student_id'),
     tutor_id: formData.get('tutor_id'),
@@ -107,6 +114,7 @@ export async function updateSession(id: string, formData: FormData) {
 }
 
 export async function deleteSession(id: string) {
+  const supabase = await createClient();
   const { error } = await supabase
     .from('sessions')
     .delete()

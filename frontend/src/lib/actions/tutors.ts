@@ -2,9 +2,10 @@
 
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
-import { supabase } from "../supabase"
+import { createClient } from "../supabase/server"
 
 export async function getTutors() {
+  const supabase = await createClient();
   const { data, error } = await supabase.from('tutors').select('*');
   if (error) {
     throw new Error(error.message);
@@ -13,6 +14,7 @@ export async function getTutors() {
 }
 
 export async function getTutorById(id: string) {
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('tutors')
     .select('*')
@@ -27,7 +29,8 @@ export async function getTutorById(id: string) {
 
 //get total number of tutors
 export async function getTotalTutors() {
-  const {count, error} = await supabase.from('tutors').select('*', {count: 'exact'});
+  const supabase = await createClient();
+  const   {count, error} = await supabase.from('tutors').select('*', {count: 'exact'});
   if (error) {
     throw new Error(error.message);
   }
@@ -35,6 +38,7 @@ export async function getTotalTutors() {
 }
 
 export async function createTutor(formData: FormData) {
+  const supabase = await createClient();
   const tutorData = {
     first_name: formData.get('first_name'),
     last_name: formData.get('last_name'),
@@ -58,6 +62,7 @@ export async function createTutor(formData: FormData) {
 }
 
 export async function updateTutor(id: string, formData: FormData) {
+  const supabase = await createClient();
   const tutorData = {
     first_name: formData.get('first_name'),
     last_name: formData.get('last_name'),
@@ -83,6 +88,7 @@ export async function updateTutor(id: string, formData: FormData) {
 }
 
 export async function deleteTutor(id: string) {
+  const supabase = await createClient();
   const { error } = await supabase
     .from('tutors')
     .delete()
